@@ -12,6 +12,9 @@ import { getAllContacts, getContactById } from './services/contacts.js';
 
 
 dotenv.config();
+
+const mongoUri = process.env.DB_URI; // Используйте переменную окружения для URI
+
 const PORT = Number(env('PORT', '3000')); 
 
 
