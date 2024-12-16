@@ -5,10 +5,17 @@ import { getAllContacts, getContactById } from '../services/contacts.js';
 import { createContact } from '../services/contacts.js';
 import { updateContact } from '../services/contacts.js';
 
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+
 export const getContactsController = async (req, res, next) => {
+  const { page, perPage } = parsePaginationParams(req.query);
   try {
-    const contacts = await getAllContacts();
-    res.send({
+    const contacts = await getAllContacts({
+      page,
+      perPage,
+    });
+
+    res.json({
       status: 200,
       message: 'Successfully found contacts!',
       data: contacts,
@@ -73,6 +80,8 @@ export const patchContactController = async (req, res, next) => {
       data: result.contact,
     });
 };
+
+
 
 
 
