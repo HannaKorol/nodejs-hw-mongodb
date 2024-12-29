@@ -19,7 +19,7 @@ export const getAllContacts = async ({
     contactsQuery.where('contactType').equals(filter.contactType);
   }
   if (typeof filter.isFavourite === 'boolean') {
-    contactsQuery.where('isFavorite').equals(filter.isFavorite);
+    contactsQuery.where('isFavourite').equals(filter.isFavourite);
   }
 
   /*  Замість цього коду нижче краще застосувати Promise.all() щоб трохи покращити швидкодію додатка  */
