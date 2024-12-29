@@ -10,12 +10,12 @@ import { parseSortParams } from '../utils/parseSortParams.js';
 
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 
-export const getContactsController = async (req, res, next) => {
+export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
   const filter = parseFilterParams(req.query);
 
-  try {
+ /*  try { */
     const contacts = await getAllContacts({
       page,
       perPage,
@@ -29,9 +29,9 @@ export const getContactsController = async (req, res, next) => {
       message: 'Successfully found contacts!',
       data: contacts,
     });
-  } catch (err) {
+ /*  } catch (err) {
     next(err);
-  }
+  } */
 };
 
 export const getContactByIdController = async (req, res, next) => {
