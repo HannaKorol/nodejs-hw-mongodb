@@ -2,7 +2,7 @@ import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
 
-import contactsRouter from './routers/contacts.js';
+import router from './routers/index.js';
 import dotenv from 'dotenv';
 import { env } from './utils/env.js';
 
@@ -43,7 +43,7 @@ export const setupServer = async () => {
         res.send('Hello World)');
     });
 
-    app.use(contactsRouter);
+    app.use(router);
 
     app.use('*', notFoundHandler);
     app.use(errorHandler);
