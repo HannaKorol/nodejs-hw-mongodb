@@ -11,7 +11,7 @@ export const registerUser = async (payload) => {
   const user = await UsersCollection.findOne({ email: payload.email });
   if (user) throw createHttpError(409, 'Email in use');
 
-    const encryptedPassword = await bcrypt.hash(payload.password, 10);
+    const encryptedPassword = await bcrypt.hash(payload.password, 10); //10-це soultrounts- це скільки разів відбувається хешування
     
   return await UsersCollection.create({
     ...payload,
@@ -24,12 +24,12 @@ export const registerUser = async (payload) => {
 export const loginUser = async (payload) => {
   const user = await UsersCollection.findOne({ email: payload.email });
   if (!user) {
-    throw createHttpError(404, 'User not found');
+    throw createHttpError(404, 'Email or password is incorrect');
   }
   const isEqual = await bcrypt.compare(payload.password, user.password); // Порівнюємо хеші паролів
 
   if (!isEqual) {
-    throw createHttpError(401, 'Unauthorized');
+    throw createHttpError(401, 'Email or password is incorrect');
   }
 
   //функція забезпечує аутентифікацію користувача, перевіряє його дані для входу, видаляє попередню сесію, генерує нові токени та створює нову сесію в базі даних.

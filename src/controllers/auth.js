@@ -1,6 +1,4 @@
-import { registerUser } from '../services/auth.js';
-import { loginUser } from '../services/auth.js';
-import { logoutUser } from '../services/auth.js';
+import { loginUser, logoutUser, registerUser } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
 import { refreshUsersSession } from '../services/auth.js';
 
@@ -18,6 +16,9 @@ export const registerUserController = async (req, res) => {
 // функція loginUserController виконує процес обробки запиту на вхід користувача і взаємодію з клієнтом через HTTP. loginUser виконує процес аутентифікації і повертає об'єкт сесії.
 export const loginUserController = async (req, res) => {
   await loginUser(req.body); //тіло запиту (req.body), яке містить дані для входу (email та пароль).
+
+  const session = await loginUser(req.body);
+
 
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
@@ -51,6 +52,9 @@ export const logoutUserController = async (req, res) => {
 
     res.status(204).send(); //Відправлення відповіді: Функція відправляє відповідь клієнту зі статусним кодом 204 (No Content). Це означає, що запит був успішно оброблений, але у відповіді немає тіла повідомлення.
 };
+
+
+
 
 
 const setupSession = (res, session) => {

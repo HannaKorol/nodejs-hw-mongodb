@@ -14,7 +14,7 @@ const usersSchema = new Schema(
 
 usersSchema.methods.toJSON = function () {
   const obj = this.toObject();
-  delete obj.password;
+  delete obj.password; //для того щоб видалити поле з обекту, треба використати delete з java script
   return obj;
 };
 
