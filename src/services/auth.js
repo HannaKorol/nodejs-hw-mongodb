@@ -22,7 +22,7 @@ export const registerUser = async (payload) => {
 };
 
 
-
+//функція loginUser виконує процес аутентифікації користувача. Вона приймає об'єкт payload, що містить дані для входу, такі як email та пароль.
 export const loginUser = async (payload) => {
   const user = await UsersCollection.findOne({ email: payload.email });
   if (!user) {
@@ -33,6 +33,25 @@ export const loginUser = async (payload) => {
   if (!isEqual) {
     throw createHttpError(401, 'Unauthorized');
   }
+
+  //функція забезпечує аутентифікацію користувача, перевіряє його дані для входу, видаляє попередню сесію, генерує нові токени та створює нову сесію в базі даних.
+  await SessionsCollection.deleteOne({ userId: user._id });
+
+  const accessToken = randomBytes(30).toString('base64'); //генеруються нові токени доступу та оновлення. Використовуються випадкові байти, які конвертуються в строку формату base64.
+  const refreshToken = randomBytes(30).toString('base64');
+
+  return await SessionsCollection.create({
+    userId: user._id,
+    accessToken,
+    refreshToken,
+    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES), // функція створює нову сесію в базі даних. Нова сесія включає ідентифікатор користувача, згенеровані токени доступу та оновлення, а також часові межі їхньої дії. Токен доступу має обмежений термін дії (наприклад, 15 хвилин), тоді як токен для оновлення діє довше (наприклад, один день).
+    refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
+  });
 };
 
+
+//logoutUser-нам треба очистити токена, який записаний в cookies(лише сервер може це зробити, оскільки вони httpOnly), а також видалити сесію із бази даних на основі id сесії:
+export const logoutUser = async (sessionId) => {
+  await SessionsCollection.deleteOne({ _id: sessionId });
+};
 

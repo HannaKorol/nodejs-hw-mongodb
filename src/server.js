@@ -1,6 +1,7 @@
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import router from './routers/index.js';
 import dotenv from 'dotenv';
@@ -39,6 +40,15 @@ export const setupServer = async () => {
         }),
     );
 
+
+
+//Module 5. Cookies 
+    app.use(cors());
+    app.use(cookieParser());
+
+
+
+
     app.get('/', (req, res) => {
         res.send('Hello World)');
     });
@@ -62,4 +72,6 @@ export const setupServer = async () => {
         console.error('Failed to establish MongoDB connection:', error);
     }
 };
+
+
 
