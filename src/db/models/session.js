@@ -1,8 +1,8 @@
 import { model, Schema } from 'mongoose';
 
-const sessionsSchema = new Schema(
+const Session = new Schema(
   {
-    userId: { type: Schema.Types.ObjectId, required: true }, //!Перевірити пізніше чи вірно вписала!!!
+    userId: { type: Schema.Types.ObjectId, required: true }, 
     accessToken: { type: String, required: true },
     refreshToken: { type: String, required: true },
     accessTokenValidUntil: { type: Date, required: true }, //короткоживучий(в нашому випадку 15 хвилин) токен, який браузер буде нам додавати в хедери запитів (хедер Authorization)
@@ -11,4 +11,4 @@ const sessionsSchema = new Schema(
   { timestamps: true, versionKey: false },
 );
 
-export const SessionsCollection = model('sessions', sessionsSchema);
+export const SessionsCollection = model('sessions', Session);

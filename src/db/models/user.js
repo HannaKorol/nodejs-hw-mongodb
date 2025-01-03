@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose';
 
-const usersSchema = new Schema(
+const User = new Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -12,10 +12,10 @@ const usersSchema = new Schema(
   { timestamps: true, versionKey: false },
 );
 
-usersSchema.methods.toJSON = function () {
+User.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password; //для того щоб видалити поле з обекту, треба використати delete з java script
   return obj;
 };
 
-export const UsersCollection = model('users', usersSchema);
+export const UsersCollection = model('users', User);

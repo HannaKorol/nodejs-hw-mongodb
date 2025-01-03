@@ -16,7 +16,7 @@ export const authenticate = async (req, res, next) => {
   }
 
   //Перевірка типу заголовка та наявності токена:
-  const bearer = authHeader.split(' ')[0];
+  const bearer = authHeader.split(' ')[0]; //має бути 2 частинки 
   const token = authHeader.split(' ')[1];
 
   //Якщо тип заголовка не "Bearer" або токен відсутній, функція викликає помилку з кодом 401 (Заголовок авторизації повинен бути типу Bearer) і передає її до наступної функції.
@@ -41,19 +41,24 @@ export const authenticate = async (req, res, next) => {
   //Якщо токен прострочений, функція викликає помилку з кодом 401 (Токен доступу прострочений) і передає її до наступної функції.
   if (isAccessTokenExpired) {
     next(createHttpError(401, 'Access token expired'));
+    return;
   }
 
-  //Пошук користувача:     Функція шукає користувача в колекції UsersCollection за ідентифікатором користувача, який зберігається в сесії.
+
+
+
+  //Пошук користувача: Функція шукає користувача в колекції UsersCollection за ідентифікатором користувача, який зберігається в сесії.
   const user = await UsersCollection.findById(session.userId);
 
   //Якщо користувача не знайдено, функція викликає помилку з кодом 401 і передає її до наступної функції.
   if (!user) {
-    next(createHttpError(401));
+    next(createHttpError(401, 'User is not found'));
     return;
   }
 
   //Якщо всі перевірки успішні, функція додає об'єкт користувача до запиту (req.user = user).
-  req.user = user;
+  /*   req.user = user; */ //!- З конспекту
+  req.user = { _id: user._id, name: user.name }; //! - З лекції
 
   //Викликається наступна функція за допомогою next, що дозволяє продовжити обробку запиту.
   next();

@@ -1,5 +1,4 @@
 //окремий роутер для авторизації користувача
-
 import { Router } from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { loginUserSchema, registerUserSchema } from '../validation/auth.js';

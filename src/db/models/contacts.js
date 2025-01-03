@@ -24,6 +24,11 @@ const contactSchema = new Schema(
       required: true,
       default: 'personal',
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+/*       ref: 'user', */
+    },
   },
   {
     timestamps: true,

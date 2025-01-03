@@ -1,9 +1,9 @@
 import { randomBytes } from 'crypto';
 import bcrypt from 'bcrypt';
-import { UsersCollection } from "../db/models/user.js";
+import { UsersCollection } from '../db/models/user.js';
 import createHttpError from 'http-errors';
 
-import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/index.js';
+import { FIFTEEN_MINUTES, THIRTY_DAYS } from '../constants/index.js';
 import { SessionsCollection } from '../db/models/session.js';
 
 export const registerUser = async (payload) => {
@@ -11,14 +11,13 @@ export const registerUser = async (payload) => {
   const user = await UsersCollection.findOne({ email: payload.email });
   if (user) throw createHttpError(409, 'Email in use');
 
-    const encryptedPassword = await bcrypt.hash(payload.password, 10); //10-це soultrounts- це скільки разів відбувається хешування
-    
+  const encryptedPassword = await bcrypt.hash(payload.password, 10); //10-це soultrounts- це скільки разів відбувається хешування
+
   return await UsersCollection.create({
     ...payload,
     password: encryptedPassword,
   });
 };
-
 
 //функція loginUser виконує процес аутентифікації користувача. Вона приймає об'єкт payload, що містить дані для входу, такі як email та пароль.
 export const loginUser = async (payload) => {
@@ -43,16 +42,14 @@ export const loginUser = async (payload) => {
     accessToken,
     refreshToken,
     accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES), // функція створює нову сесію в базі даних. Нова сесія включає ідентифікатор користувача, згенеровані токени доступу та оновлення, а також часові межі їхньої дії. Токен доступу має обмежений термін дії (наприклад, 15 хвилин), тоді як токен для оновлення діє довше (наприклад, один день).
-    refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
+    refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAYS),
   });
 };
-
 
 //logoutUser-нам треба очистити токена, який записаний в cookies(лише сервер може це зробити, оскільки вони httpOnly), а також видалити сесію із бази даних на основі id сесії:
 export const logoutUser = async (sessionId) => {
   await SessionsCollection.deleteOne({ _id: sessionId });
 };
-
 
 const createSession = () => {
   const accessToken = randomBytes(30).toString('base64');
@@ -62,10 +59,9 @@ const createSession = () => {
     accessToken,
     refreshToken,
     accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
-    refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
+    refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAYS),
   };
 };
-
 
 //Таким чином, функція refreshUsersSession обробляє запит на оновлення сесії користувача, перевіряє наявність і термін дії існуючої сесії, генерує нову сесію та зберігає її в базі даних.
 export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
@@ -90,7 +86,6 @@ export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
 
   const newSession = createSession(); //createSession повертає об'єкт з новими токенами і термінами їхньої дії.
   await SessionsCollection.deleteOne({ _id: sessionId, refreshToken });
-
 
   //Збереження нової сесії в базі даних:     Функція створює нову сесію в колекції SessionsCollection, використовуючи ідентифікатор користувача з існуючої сесії та дані нової сесії, згенеровані функцією createSession.Нову сесію збережено в базі даних і функція повертає її.
   return await SessionsCollection.create({
