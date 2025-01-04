@@ -13,6 +13,9 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
 import { ContactsCollection } from './db/models/contacts.js';
 import { initMongoConnection } from './db/initMongoConnection.js'; // Импортируй функцию
+
+  import { UPLOAD_DIR } from './constants/index.js';
+
 import mongoose from 'mongoose';
 dotenv.config();
 const mongoUri = process.env.DB_URI; // Используйте переменную окружения для URI
@@ -46,7 +49,7 @@ export const setupServer = async () => {
     app.use(cors());
     app.use(cookieParser());
 
-
+app.use('/uploads', express.static(UPLOAD_DIR));
 
 
     app.get('/', (req, res) => {
