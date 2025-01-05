@@ -60,8 +60,13 @@ export const getContactByIdController = async (req, res, next) => {
 
 export const createContactController = async (req, res) => {
   
-    const contact = await createContact({ ...req.body, userId: req.user._id });//! userId
+    const contact = await createContact({
+      ...req.body,
+      userId: req.user._id,
+      photo: photoUrl,
+    });//! userId
 
+  console.log('Photo URL:', photoUrl);
   console.log(req.body);
     console.log(req.file);
   
@@ -94,18 +99,21 @@ export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const photo = req.file;
 
-  console.log(req.file);
-
+/*   console.log('req.file:', req.file); */
+  console.log('File received:', photo); // Додатковий лог для перевірки файлу
 
   let photoUrl;
-  
-   if (photo) {
-     if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
-  console.log('ENABLE_CLOUDINARY:', process.env.ENABLE_CLOUDINARY);
-  photoUrl = await saveFileToCloudinary(photo);
-} else {
-  photoUrl = await saveFileToUploadDir(photo);
-}}
+
+  if (photo) {
+    if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+      console.log('Uploading to Cloudinary...');
+      console.log('ENABLE_CLOUDINARY:', process.env.ENABLE_CLOUDINARY);
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+       console.log('Saving to upload directory...');
+    }
+  }
 
   /* в photo лежить обʼєкт файлу
 		{
@@ -122,7 +130,7 @@ export const patchContactController = async (req, res, next) => {
 
   const result = await updateContact(contactId, {
     ...req.body,
-    photo: photoUrl,
+    photo: photoUrl || req.body.photo, // Якщо немає нового фото, залишаємо поточне
   });
 
   if (!result) {
@@ -135,6 +143,10 @@ export const patchContactController = async (req, res, next) => {
     data: result.contact,
   });
 };
+
+
+console.log('Saving file to Cloudinary...');
+
 
 
 
