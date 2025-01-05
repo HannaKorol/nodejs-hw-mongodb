@@ -62,6 +62,7 @@ export const createContactController = async (req, res) => {
   
     const contact = await createContact({ ...req.body, userId: req.user._id });//! userId
 
+  
    if (!contact) {
      return res
        .status(400)
@@ -90,6 +91,8 @@ export const deleteContactController = async (req, res, next) => {
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const photo = req.file;
+
+
 
   let photoUrl;
   

@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     //filename (ім'я файлу): Цей параметр визначає, яке ім'я буде надане завантаженому файлу.
-    const uniqueSuffix = Date.now();
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9); //! з лекції 
     cb(null, `${uniqueSuffix}_${file.originalname}`);
   },
 });
