@@ -4,10 +4,9 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint src/**/*.js",
-    "start": "node ./src/index.js",
-    "dev": "nodemon src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run build-docs",
+    "build-docs": "redocly bundle --ext json -o docs/swagger.json",
+    "preview-docs": "redocly preview-docs"
   },
   "keywords": [],
   "author": "Hanna <hanna.korol11@gmail.com>",
@@ -15,6 +14,7 @@
   "description": "",
   "devDependencies": {
     "@eslint/js": "^9.15.0",
+    "@redocly/cli": "^1.27.0",
     "eslint": "^9.15.0",
     "globals": "^15.12.0",
     "nodemon": "^3.1.7",
