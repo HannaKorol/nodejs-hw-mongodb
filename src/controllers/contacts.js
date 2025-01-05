@@ -85,8 +85,9 @@ export const createContactController = async (req, res) => {
 
 export const deleteContactController = async (req, res, next) => {
   const { contactId } = req.params;
+    const { _id: userId } = req.user;
 
-  const contact = await deleteContact(contactId); 
+  const contact = await deleteContact(contactId, userId); 
 
   if (!contact) {
     throw createHttpError(404, 'Contact  not found');
@@ -97,6 +98,7 @@ export const deleteContactController = async (req, res, next) => {
 
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
+  const { _id: userId } = req.user;
   const photo = req.file;
 
 /*   console.log('req.file:', req.file); */
@@ -128,7 +130,7 @@ export const patchContactController = async (req, res, next) => {
 	  }
 	*/
 
-  const result = await updateContact(contactId, {
+  const result = await updateContact(contactId, userId, {
     ...req.body,
     photo: photoUrl || req.body.photo, // Якщо немає нового фото, залишаємо поточне
   });
