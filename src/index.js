@@ -16,7 +16,7 @@ const bootstrap = async () => {
 
 bootstrap();
 
-console.log('ENABLE_CLOUDINARY:', process.env.ENABLE_CLOUDINARY);
+/* console.log('ENABLE_CLOUDINARY:', process.env.ENABLE_CLOUDINARY);
 console.log('CLOUD_NAME:', process.env.CLOUD_NAME);
 console.log('API_KEY:', process.env.API_KEY);
-console.log('API_SECRET:', process.env.API_SECRE);
+console.log('API_SECRET:', process.env.API_SECRE); */

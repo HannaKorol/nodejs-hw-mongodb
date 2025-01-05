@@ -66,9 +66,9 @@ export const createContactController = async (req, res) => {
       photo: photoUrl,
     });//! userId
 
-  console.log('Photo URL:', photoUrl);
+/*   console.log('Photo URL:', photoUrl);
   console.log(req.body);
-    console.log(req.file);
+    console.log(req.file); */
   
    if (!contact) {
      return res
@@ -106,12 +106,12 @@ export const patchContactController = async (req, res, next) => {
 
   if (photo) {
     if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
-      console.log('Uploading to Cloudinary...');
-      console.log('ENABLE_CLOUDINARY:', process.env.ENABLE_CLOUDINARY);
+/*       console.log('Uploading to Cloudinary...'); */
+/*       console.log('ENABLE_CLOUDINARY:', process.env.ENABLE_CLOUDINARY); */
       photoUrl = await saveFileToCloudinary(photo);
     } else {
       photoUrl = await saveFileToUploadDir(photo);
-       console.log('Saving to upload directory...');
+/*        console.log('Saving to upload directory...'); */
     }
   }
 
@@ -145,7 +145,7 @@ export const patchContactController = async (req, res, next) => {
 };
 
 
-console.log('Saving file to Cloudinary...');
+/* console.log('Saving file to Cloudinary...'); */
 
 
 

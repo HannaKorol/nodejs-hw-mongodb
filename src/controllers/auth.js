@@ -102,6 +102,6 @@ export const resetPasswordController = async (req, res) => {
     data: {},
   });
 
-  console.log(req.body);
+/*   console.log(req.body); */
 };
 
