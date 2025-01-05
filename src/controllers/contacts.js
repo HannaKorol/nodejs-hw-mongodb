@@ -62,6 +62,8 @@ export const createContactController = async (req, res) => {
   
     const contact = await createContact({ ...req.body, userId: req.user._id });//! userId
 
+  console.log(req.body);
+    console.log(req.file);
   
    if (!contact) {
      return res
@@ -92,12 +94,14 @@ export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const photo = req.file;
 
+  console.log(req.file);
 
 
   let photoUrl;
   
    if (photo) {
-if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+     if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+  console.log('ENABLE_CLOUDINARY:', process.env.ENABLE_CLOUDINARY);
   photoUrl = await saveFileToCloudinary(photo);
 } else {
   photoUrl = await saveFileToUploadDir(photo);
