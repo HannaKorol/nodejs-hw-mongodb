@@ -1,4 +1,4 @@
-    description: Bad Request
+    description: Error creating a contact
     content:
       application/json:
         schema:
@@ -9,4 +9,4 @@
               example: 400
             message:
               type: string
-              example: Invalid input
+              example: Error creating a contact
