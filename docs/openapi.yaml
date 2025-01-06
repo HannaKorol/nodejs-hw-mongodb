@@ -10,7 +10,7 @@ tags:
   - name: Contacts
     description: Operation with contacts
 servers:
-  - url: http://127.0.0.1:3000  # ЯК В ЛЕКЦІЇ 29:01
+  - url: http://127.0.0.1:3001  # ЯК В ЛЕКЦІЇ 29:01
   - url: https://your-deployed-site.com  # ТРЕБА ВПИСАТИ ВИРНИЙ САИТ
 paths:
   /contacts/{id}:
