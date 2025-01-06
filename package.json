@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "main": "index.js",
- "scripts": {
+  "scripts": {
+    "dev": "node -r dotenv/config src/server.js", 
     "start": "node -r dotenv/config src/server.js",
     "build": "npm run build-docs",
     "build-docs": "redocly bundle docs/openapi.yaml --ext json -o docs/swagger.json",
