@@ -24,9 +24,11 @@ const mongoUri = process.env.DB_URI; // Используйте переменн�
 
 const PORT = Number(env('PORT', '3000')); 
 
-
 export const setupServer = async () => {
     const app = express();
+
+const PORT = Number(env('PORT', '3000')); 
+
 
     app.use(
       express.json({
