@@ -14,7 +14,9 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { ContactsCollection } from './db/models/contacts.js';
 import { initMongoConnection } from './db/initMongoConnection.js'; // Импортируй функцию
 
-  import { UPLOAD_DIR } from './constants/index.js';
+import { UPLOAD_DIR } from './constants/index.js';
+  
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 import mongoose from 'mongoose';
 dotenv.config();
@@ -43,7 +45,8 @@ export const setupServer = async () => {
         }),
     );
 
-
+app.use('/uploads', express.static(UPLOAD_DIR));
+app.use('/api-docs', swaggerDocs());
 
 //Module 5. Cookies 
     app.use(cors());
