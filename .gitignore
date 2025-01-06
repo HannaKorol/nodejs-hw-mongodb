@@ -10,3 +10,6 @@
 
 /temp/*
 !/temp/.gitkeep
+
+/src/public/photos/*
+!/src/public/photos/.gitkeep

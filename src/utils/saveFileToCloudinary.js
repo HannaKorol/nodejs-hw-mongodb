@@ -13,9 +13,19 @@ cloudinary.v2.config({
 
 
 
+
 //Цей код налаштовує з'єднання з Cloudinary, використовуючи параметри конфігурації, такі як ім'я хмари, API-ключ та API-секрет, які зчитуються із змінних середовища. Потім створюється асинхронна функція для збереження файлів. Ця функція приймає файл, завантажує його на сервер Cloudinary, видаляє файл із тимчасової папки і повертає безпечну URL-адресу завантаженого файлу.
 export const saveFileToCloudinary = async (file) => {
-  const response = await cloudinary.v2.uploader.upload(file.path);
-  await fs.unlink(file.path);
-  return response.secure_url;
+  try {
+    // Завантажуємо файл на Cloudinary
+    const response = await cloudinary.v2.uploader.upload(file.path);
+
+    // Після успішного завантаження видаляємо файл з тимчасової папки
+    await fs.unlink(file.path);
+
+    return response.secure_url; // Повертаємо URL на фото
+  } catch (error) {
+    console.error('Error uploading to Cloudinary:', error);
+    throw new Error('Error uploading file to Cloudinary');
+  }
 };

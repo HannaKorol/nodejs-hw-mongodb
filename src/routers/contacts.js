@@ -30,7 +30,7 @@ router.get(
 
 router.post(
   '/',
-  isValidId,
+  /* isValidId, */
   upload.single('photo'), // додаємо цю middleware
   validateBody(updateContactSchema),
   ctrlWrapper(createContactController),
@@ -40,8 +40,8 @@ router.delete('/:contactId', ctrlWrapper(deleteContactController));
 
 router.patch(
   '/:contactId',
-  isValidId,
-  upload.single('photo'), // додаємо цю middleware
+/*   isValidId,
+ */  upload.single('photo'), // додаємо цю middleware
   validateBody(modifyContactSchema),
   ctrlWrapper(patchContactController),
 );
