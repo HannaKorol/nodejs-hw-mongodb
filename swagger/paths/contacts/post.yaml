@@ -43,7 +43,7 @@ requestBody:
             example: https://res.cloudinary.com/uqwgdu/image/upload/image.png
 responses:
   '201':
-    description: Successfully created a contact
+    description: Successfully created a contact!
     content:
       application/json:
         schema:
@@ -58,7 +58,7 @@ responses:
               example: 201
             message:
               type: string
-              example: Successfully created a contact
+              example: Successfully created a contact!
             data:
               $ref: '../../components/schemas/contact.yaml'
   '400':
