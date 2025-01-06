@@ -1,3 +1,7 @@
+/* import * as fs from "node:fs/promises";
+import path from "node:path"; */
+
+
 import createHttpError from 'http-errors';
 
 import { deleteContact } from '../services/contacts.js';
@@ -11,7 +15,6 @@ import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { getEnvVar } from '../utils/getEnvVar.js';
-
 
 export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -58,24 +61,39 @@ export const getContactByIdController = async (req, res, next) => {
 };
 
 
-export const createContactController = async (req, res) => {
-  
-    const contact = await createContact({
-      ...req.body,
-      userId: req.user._id,
-      photo: photoUrl,
-    });//! userId
 
-/*   console.log('Photo URL:', photoUrl);
-  console.log(req.body);
-    console.log(req.file); */
-  
-   if (!contact) {
-     return res
-       .status(400)
-       .json({ status: 400, message: 'Error creating contact' });
-   }
-  
+
+
+export const createContactController = async (req, res) => {
+
+ let photoUrls;
+  if (req.file) {
+    if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+      console.log('ENABLE_CLOUDINARY:', process.env.ENABLE_CLOUDINARY);
+      photoUrls = await saveFileToCloudinary(req.file);
+    } else {
+      photoUrls = await saveFileToUploadDir(req.file);
+    }
+
+  }
+
+
+console.log(req.file);
+
+
+  const contact = await createContact({
+    ...req.body,
+    userId: req.user._id,
+    photo: photoUrls,
+  }); //! userId
+
+
+  if (!contact) {
+    return res
+      .status(400)
+      .json({ status: 400, message: 'Error creating contact' });
+  }
+
   res.status(201).json({
     status: 201,
     message: 'Successfully  created a contact!',
@@ -83,10 +101,13 @@ export const createContactController = async (req, res) => {
   });
 };
 
+
+
+
 export const deleteContactController = async (req, res, next) => {
   const { contactId } = req.params;
 
-  const contact = await deleteContact(contactId); 
+  const contact = await deleteContact(contactId);
 
   if (!contact) {
     throw createHttpError(404, 'Contact  not found');
@@ -99,19 +120,20 @@ export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const photo = req.file;
 
-/*   console.log('req.file:', req.file); */
+  /*   console.log('req.file:', req.file); */
   console.log('File received:', photo); // Додатковий лог для перевірки файлу
 
   let photoUrl;
 
   if (photo) {
     if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
-/*       console.log('Uploading to Cloudinary...'); */
-/*       console.log('ENABLE_CLOUDINARY:', process.env.ENABLE_CLOUDINARY); */
+      /*       console.log('Uploading to Cloudinary...'); */
+    
+      /*       console.log('ENABLE_CLOUDINARY:', process.env.ENABLE_CLOUDINARY); */
       photoUrl = await saveFileToCloudinary(photo);
     } else {
       photoUrl = await saveFileToUploadDir(photo);
-/*        console.log('Saving to upload directory...'); */
+      /*        console.log('Saving to upload directory...'); */
     }
   }
 
@@ -143,14 +165,3 @@ export const patchContactController = async (req, res, next) => {
     data: result.contact,
   });
 };
-
-
-/* console.log('Saving file to Cloudinary...'); */
-
-
-
-
-
-
-
-
