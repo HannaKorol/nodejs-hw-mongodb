@@ -11,7 +11,10 @@
   },
   "servers": [
     {
-      "url": "http://127.0.0.1:3001"
+      "url": "http://127.0.0.1:3000"
+    },
+    {
+      "url": "https://contacts-app7-mlum.onrender.com"
     }
   ],
   "tags": [
@@ -122,9 +125,9 @@
         "tags": [
           "Contacts"
         ],
-        "summary": "Patch contact by id",
-        "operationId": "patchContact",
-        "description": "Update a contact by ID",
+        "summary": "Update a contact by id",
+        "description": "Update specific fields of a contact by Id.",
+        "operationId": "updateContact",
         "security": [
           {
             "bearerAuth": []
@@ -132,15 +135,62 @@
         ],
         "parameters": [
           {
-            "in": "path",
             "name": "id",
+            "in": "path",
             "required": true,
+            "description": "ID of the contact to update",
             "schema": {
               "type": "string",
               "example": "65ca67e7ae7f10c88b598384"
             }
           }
         ],
+        "requestBody": {
+          "description": "Fields to update in the contact",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "Contact's name",
+                    "type": "string",
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "description": "Contact's email",
+                    "type": "string",
+                    "example": "mia@ukr.net"
+                  },
+                  "phoneNumber": {
+                    "description": "Contact's phone number",
+                    "type": "number",
+                    "example": 380678345590
+                  },
+                  "contactType": {
+                    "description": "Contact's type",
+                    "type": "string",
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ]
+                  },
+                  "isFavourite": {
+                    "description": "Whether the contact is favourite",
+                    "type": "boolean",
+                    "example": false
+                  },
+                  "photo": {
+                    "description": "Contact's photo",
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successfully patched a contact",
@@ -163,6 +213,7 @@
                       "example": "Successfully patched a contact!"
                     },
                     "data": {
+                      "type": "object",
                       "$ref": "#/components/schemas/contact"
                     }
                   }
@@ -193,15 +244,6 @@
           }
         ],
         "parameters": [
-          {
-            "in": "query",
-            "name": "name",
-            "schema": {
-              "type": "string"
-            },
-            "description": "Filter by contact name",
-            "example": "John"
-          },
           {
             "in": "query",
             "name": "isFavourite",
@@ -344,6 +386,11 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "name",
+                  "phoneNumber",
+                  "contactType"
+                ],
                 "properties": {
                   "name": {
                     "description": "Contact's name",
@@ -374,11 +421,6 @@
                       "home"
                     ],
                     "default": "personal"
-                  },
-                  "userId": {
-                    "description": "Contact's authorised user",
-                    "type": "string",
-                    "example": "6776b3419a73dce1d33a4fe2"
                   },
                   "photo": {
                     "description": "Link to contact's photo",

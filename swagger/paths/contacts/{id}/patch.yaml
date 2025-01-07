@@ -1,18 +1,50 @@
 # swagger/paths/contacts/{id}/get.yaml
 tags:
   - Contacts
-summary: Patch contact by id
-operationId: patchContact
-description: 'Update a contact by ID'
+summary: Update a contact by id
+description: Update specific fields of a contact by Id.
+operationId: updateContact
 security:
   - bearerAuth: []
 parameters:
-  - in: path
-    name: id
+  - name: id
+    in: path
     required: true
+    description: ID of the contact to update
     schema:
       type: string
       example: '65ca67e7ae7f10c88b598384'
+requestBody:
+  description: Fields to update in the contact
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        properties:
+          name:
+            description: "Contact's name"
+            type: string
+            example: 'John Doe'
+          email:
+            description: "Contact's email"
+            type: string
+            example: mia@ukr.net
+          phoneNumber:
+            description: "Contact's phone number"
+            type: number
+            example: 380678345590
+          contactType:
+            description: "Contact's type"
+            type: string
+            enum: ['work', 'home', 'personal']
+          isFavourite:
+            description: 'Whether the contact is favourite'
+            type: boolean
+            example: false
+          photo:
+            description: "Contact's photo"
+            type: string
+            format: binary
 responses:
   '200':
     description: 'Successfully patched a contact'
@@ -32,6 +64,7 @@ responses:
               type: string
               example: Successfully patched a contact!
             data:
+              type: object
               $ref: ../../../components/schemas/contact.yaml
   '404':
     $ref: ../../../components/responces/404.yaml

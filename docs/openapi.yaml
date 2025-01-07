@@ -10,7 +10,8 @@ tags:
   - name: Contacts
     description: Operation with contacts
 servers:
-  - url: http://127.0.0.1:3001  # ЯК В ЛЕКЦІЇ 29:01
+  - url: http://127.0.0.1:3000  # ЯК В ЛЕКЦІЇ 29:01
+  - url: https://contacts-app7-mlum.onrender.com  # посилання на задеплоєний проект на рендер 
 paths:
   /contacts/{id}:
     get:
